@@ -8,8 +8,6 @@ from utils.generateDescription import generate_description
 import os
 import fitz
 import numpy as np
-import base64
-import requests
 import json
 import faiss
 
@@ -35,10 +33,8 @@ def save_documents(documents, path=DOCUMENTS_PATH):
             json.dump(item, f, ensure_ascii=False)
             f.write("\n")
 
-
 def save_index(index, path=INDEX_PATH):
     faiss.write_index(index, path)
-
 
 def build_image_documents(pdf_path=PDF_PATH, output_dir=OUTPUT_DIR):
     context = image_extraction(pdf_path, output_dir)
@@ -76,7 +72,6 @@ def build_text_documents(pdf_path=PDF_PATH,chunk_size=500,chunk_overlap=100):
                     }
                 )
             )   
-
 
 def build_index(documents):
     embeddings = np.array(
