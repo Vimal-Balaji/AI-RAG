@@ -1,7 +1,6 @@
-#-------------------CONSTANTS-------------------
 import os
 
-
+#-------------------CONSTANTS-------------------
 LM_STUDIO_URL = "http://localhost:1234/v1/chat/completions"
 PDF_PATH = "document.pdf"
 OUTPUT_DIR = "extracted_images"
