@@ -93,12 +93,12 @@ def build_index(documents):
 
 
 if __name__ == "__main__":
-    pdf_names=["Docx1.pdf","Docx3.pdf","Docx4.pdf","Docx5.pdf"]
+    pdf_names=["Docx1.pdf","Docx2.pdf","Docx3.pdf","Docx4.pdf","Docx5.pdf"]
     documents = []
     for pdf_name in pdf_names:
         pdf_path=os.path.join(PDF_PATH,pdf_name)
         print(pdf_path)
-        build_image_documents(pdf_path=pdf_path)
+        build_image_documents(pdf_path=pdf_path,chunk_size=500)
         build_text_documents(pdf_path=pdf_path)
     save_documents(documents)
     build_index(documents)
