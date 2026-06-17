@@ -2,13 +2,11 @@ from multiprocessing import context
 import fitz  # PyMuPDF
 import os
 
-pdf_path = "document.pdf"
-output_dir = "extracted_images"
 def image_extraction(pdf_path,output_dir):
 
     context={}
-    os.makedirs(output_dir, exist_ok=True)
     pdf_name = os.path.splitext(os.path.basename(pdf_path))[0]
+    os.makedirs(os.path.join(output_dir,pdf_name), exist_ok=True)
     doc = fitz.open(pdf_path)
     image_count = 0
 
@@ -26,7 +24,7 @@ def image_extraction(pdf_path,output_dir):
                 f"{pdf_name}_img_{image_count}.{image_ext}"
             )
 
-            image_path = os.path.join(output_dir, image_name)
+            image_path = os.path.join(output_dir,pdf_name,image_name)
 
             with open(image_path, "wb") as f:
                 f.write(image_bytes)
@@ -38,11 +36,10 @@ def image_extraction(pdf_path,output_dir):
                 continue
 
             img_rect = rects[0]
-            print(f"\nImage {page_num+1}_{img_index+1}")
 
             # Extract all text blocks
             blocks = page.get_text("blocks")
-            closest_text = None
+            closest_text = ""
             min_distance = float("inf")
 
             for block in blocks:
@@ -53,6 +50,7 @@ def image_extraction(pdf_path,output_dir):
                         min_distance = distance
                         closest_text = text.strip()
             context[image_path]=[closest_text,page_num+1]
+            print(context)
     return context
 
 
