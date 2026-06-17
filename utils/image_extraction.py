@@ -8,6 +8,7 @@ def image_extraction(pdf_path,output_dir):
 
     context={}
     os.makedirs(output_dir, exist_ok=True)
+    pdf_name = os.path.splitext(os.path.basename(pdf_path))[0]
     doc = fitz.open(pdf_path)
     image_count = 0
 
@@ -15,7 +16,6 @@ def image_extraction(pdf_path,output_dir):
         page = doc[page_num]
         images = page.get_images(full=True)
         for img_index, img in enumerate(images):
-
             xref = img[0]
             rects = page.get_image_rects(xref)
             base_image = doc.extract_image(xref)
@@ -23,7 +23,7 @@ def image_extraction(pdf_path,output_dir):
             image_ext = base_image["ext"]
 
             image_name = (
-                f"page_{page_num+1}_img_{img_index+1}.{image_ext}"
+                f"{pdf_name}_img_{image_count}.{image_ext}"
             )
 
             image_path = os.path.join(output_dir, image_name)

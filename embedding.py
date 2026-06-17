@@ -50,6 +50,8 @@ def build_image_documents(pdf_path=PDF_PATH, output_dir=OUTPUT_DIR):
                 "path": full_path,
                 "page_num": context.get(full_path, ["", ""])[1],
                 "type": "image",
+                "source":os.path.basename(pdf_path),
+                "chunk_id":len(documents)+1
             },
         )
         documents.append(document)
@@ -57,6 +59,7 @@ def build_image_documents(pdf_path=PDF_PATH, output_dir=OUTPUT_DIR):
 def build_text_documents(pdf_path=PDF_PATH,chunk_size=500,chunk_overlap=100):
     splitter = RecursiveCharacterTextSplitter(chunk_size=chunk_size, chunk_overlap=chunk_overlap, separators=["\n\n", "\n", ". ", " ", ""])
     doc = fitz.open(pdf_path)
+    #pdf_path="documents/document.pdf"
     for page_number in range(len(doc)):
         page = doc[page_number]
         page_text = page.get_text("text")
@@ -69,9 +72,11 @@ def build_text_documents(pdf_path=PDF_PATH,chunk_size=500,chunk_overlap=100):
                         "path": pdf_path,
                         "page_num": page_number + 1,
                         "type": "text",
+                        "source":os.path.basename(pdf_path),
+                        "chunk_id":len(documents)+1
                     }
                 )
-            )   
+            )
 
 def build_index(documents):
     embeddings = np.array(
@@ -85,8 +90,11 @@ def build_index(documents):
 
 
 if __name__ == "__main__":
+    pdf_names=["document.pdf"]
     documents = []
-    build_image_documents()
-    build_text_documents()
+    for pdf_name in pdf_names:
+        pdf_path=os.path.join(PDF_PATH,pdf_name)
+        build_image_documents(pdf_path=pdf_path)
+        build_text_documents(pdf_path=pdf_path)
     save_documents(documents)
     build_index(documents)
