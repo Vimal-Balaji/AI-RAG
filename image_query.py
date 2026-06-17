@@ -24,10 +24,21 @@ def load():
 def retrieve(query, top_k=3):
     q = embeddings_model.embed_query(query)
     q = np.array([q]).astype("float32")
+
     scores, idx = index.search(q, top_k)
+
     print("Scores:", scores)
     print("Indices:", idx)
-    return [documents[i] for i in idx[0]]
+
+    retrieved_chunks = [documents[i] for i in idx[0]]
+
+    with open("files.txt", "w", encoding="utf-8") as f:
+        for rank, chunk in enumerate(retrieved_chunks, start=1):
+            f.write(f"=== Chunk {rank} ===\n")
+            f.write(chunk.page_content)
+            f.write("\n\n")
+
+    return retrieved_chunks
 
 def detect_page_query(query):
     """
