@@ -36,10 +36,13 @@ def save_documents(documents, path=DOCUMENTS_PATH):
 def save_index(index, path=INDEX_PATH):
     faiss.write_index(index, path)
 
-def build_image_documents(pdf_path=PDF_PATH, output_dir=OUTPUT_DIR):
+def build_image_documents(pdf_path, output_dir=OUTPUT_DIR):
     context = image_extraction(pdf_path, output_dir)
+    pdf_name = os.path.splitext(os.path.basename(pdf_path))[0]
+    output_dir=os.path.join(output_dir,pdf_name)
     for path in os.listdir(output_dir):
         full_path = os.path.join(output_dir, path)
+        print(full_path)
         print("Processing:", path)
         desc = generate_description(full_path, context.get(full_path, "")[0])
         print(f"Description from image {path}:", desc)
@@ -56,7 +59,7 @@ def build_image_documents(pdf_path=PDF_PATH, output_dir=OUTPUT_DIR):
         )
         documents.append(document)
 
-def build_text_documents(pdf_path=PDF_PATH,chunk_size=500,chunk_overlap=100):
+def build_text_documents(pdf_path,chunk_size=500,chunk_overlap=100):
     splitter = RecursiveCharacterTextSplitter(chunk_size=chunk_size, chunk_overlap=chunk_overlap, separators=["\n\n", "\n", ". ", " ", ""])
     doc = fitz.open(pdf_path)
     #pdf_path="documents/document.pdf"
@@ -90,10 +93,11 @@ def build_index(documents):
 
 
 if __name__ == "__main__":
-    pdf_names=["document.pdf"]
+    pdf_names=["Docx1.pdf","Docx3.pdf","Docx4.pdf","Docx5.pdf"]
     documents = []
     for pdf_name in pdf_names:
         pdf_path=os.path.join(PDF_PATH,pdf_name)
+        print(pdf_path)
         build_image_documents(pdf_path=pdf_path)
         build_text_documents(pdf_path=pdf_path)
     save_documents(documents)
