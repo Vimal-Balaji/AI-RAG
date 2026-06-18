@@ -8,3 +8,7 @@ CHUNK_SIZE=600
 DOCUMENTS_PATH = os.path.join("embedded_db",f"chunk_size_{CHUNK_SIZE}","documents.jsonl")
 INDEX_PATH = os.path.join("embedded_db",f"chunk_size_{CHUNK_SIZE}","description_index.faiss") 
 DESCRIPTION_DIR = "image_descriptions"
+
+
+#-----------------VideoRag-----------------------
+
