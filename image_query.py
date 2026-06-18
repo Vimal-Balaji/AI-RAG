@@ -28,7 +28,7 @@ def retrieve(query, top_k=3):
     scores, idx = index.search(q, top_k)
 
     print("Scores:", scores)
-    print("Indices:", idx)
+    print("Indices:", idx+1)
 
     retrieved_chunks = [documents[i] for i in idx[0]]
 
@@ -161,7 +161,7 @@ if __name__ == "__main__":
             continue
 
         # ── Regular RAG branch ────────────────────────────────────────────
-        results = retrieve(query, top_k=5)
+        results = retrieve(query, top_k=10)
         answer = generate_description(results, query_text=query)
         print("\nAnswer:")
         print(answer)

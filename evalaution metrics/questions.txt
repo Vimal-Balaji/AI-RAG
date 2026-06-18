@@ -1,0 +1,20 @@
+Docx1
+1. What is scaled dot product attention? 
+2. What is positional encoding?
+3. Why self attention?
+Docx2
+1. What is LORA?
+2. What is IEEE802.15.4
+3.  What is SigFox?
+Docx3
+1. What is consistent hashing?
+2. what is hinted handoff?
+3.what is ring membership?
+Docx4
+1. What is GFS cluster?
+2. what is record append?
+3.what are the master operation ?
+Docx5
+1. What is map reduce?
+2. What is task granularity?
+3. Explain the map reduce instances overtime?

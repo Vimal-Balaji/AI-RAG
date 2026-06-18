@@ -3,7 +3,7 @@ from utils.embeddingClass import embeddings_model
 from langchain_core.documents import Document
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from utils.constants import *
-from utils.generateDescription import generate_description
+from utils.generateDescription import load_or_generate_description
 
 import os
 import fitz
@@ -11,7 +11,7 @@ import numpy as np
 import json
 import faiss
 
-os.makedirs("embedded_db", exist_ok=True)
+os.makedirs(DESCRIPTION_DIR, exist_ok=True)
 
 # ── Initialize LM Studio Embeddings ──────────────────────────────────────────────
 # embeddings_model = LMStudioEmbeddings(model="text-embedding-bge-m3")
@@ -24,6 +24,7 @@ def embed_text(text: str) -> np.ndarray:
 #--------Writing document-------------
 
 def save_documents(documents, path=DOCUMENTS_PATH):
+    os.makedirs(os.path.dirname(path), exist_ok=True)
     with open(path, "w", encoding="utf-8") as f:
         for document in documents:
             item = {
@@ -34,27 +35,30 @@ def save_documents(documents, path=DOCUMENTS_PATH):
             f.write("\n")
 
 def save_index(index, path=INDEX_PATH):
+    os.makedirs(os.path.dirname(path), exist_ok=True)
     faiss.write_index(index, path)
 
 def build_image_documents(pdf_path, output_dir=OUTPUT_DIR):
     context = image_extraction(pdf_path, output_dir)
     pdf_name = os.path.splitext(os.path.basename(pdf_path))[0]
-    output_dir=os.path.join(output_dir,pdf_name)
-    for path in os.listdir(output_dir):
-        full_path = os.path.join(output_dir, path)
-        print(full_path)
-        print("Processing:", path)
-        desc = generate_description(full_path, context.get(full_path, "")[0])
-        print(f"Description from image {path}:", desc)
-
+    image_dir = os.path.join(output_dir, pdf_name)
+    for image_file in os.listdir(image_dir):
+        full_path = os.path.join(image_dir, image_file)
+        print("Processing:", full_path)
+        context_text = context.get(full_path, ["", ""])[0]
+        desc = load_or_generate_description(
+            image_path=full_path,
+            context_text=context_text,
+            pdf_name=pdf_name
+        )
         document = Document(
             page_content=desc,
             metadata={
                 "path": full_path,
                 "page_num": context.get(full_path, ["", ""])[1],
                 "type": "image",
-                "source":os.path.basename(pdf_path),
-                "chunk_id":len(documents)+1
+                "source": os.path.basename(pdf_path),
+                "chunk_id": len(documents) + 1
             },
         )
         documents.append(document)
@@ -98,7 +102,7 @@ if __name__ == "__main__":
     for pdf_name in pdf_names:
         pdf_path=os.path.join(PDF_PATH,pdf_name)
         print(pdf_path)
-        build_image_documents(pdf_path=pdf_path,chunk_size=500)
-        build_text_documents(pdf_path=pdf_path)
+        build_image_documents(pdf_path=pdf_path)
+        build_text_documents(pdf_path=pdf_path,chunk_size=CHUNK_SIZE)
     save_documents(documents)
     build_index(documents)
