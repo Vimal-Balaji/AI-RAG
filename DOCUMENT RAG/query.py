@@ -161,7 +161,7 @@ if __name__ == "__main__":
             continue
 
         # ── Regular RAG branch ────────────────────────────────────────────
-        results = retrieve(query, top_k=10)
+        results = retrieve(query, top_k=5)
         answer = generate_description(results, query_text=query)
         print("\nAnswer:")
         print(answer)
