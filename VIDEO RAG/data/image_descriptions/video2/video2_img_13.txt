@@ -1,0 +1,9 @@
+**Extracted Text:**
+RMS Voltage/Current in Half wave Rectifier
+18/22
+
+***
+
+**Image Description:**
+
+The image is a slide presentation focusing on electrical engineering principles. The primary **technical content** discussed is the calculation or analysis of Root Mean Square (RMS) Voltage and Current specifically within a Half-wave Rectifier circuit. No charts, graphs, tables, axes labels, or specific objects related to the technical topic are visible; the slide serves as an introductory title page for this subject matter. The presentation appears to be part of a larger set of slides (18/22).

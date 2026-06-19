@@ -1,0 +1,25 @@
+**Extracted Text:**
+Figure 1: The Transformer - model architecture.
+Inputs
+Positional Encoding $\oplus$ Input Embedding
+Add & Norm
+Multi-Head Attention
+Add & Norm
+Feed Forward
+Outputs (shifted right)
+Positional Encoding $\oplus$ Output Embedding
+Add & Norm
+Masked Multi-Head Attention
+Add & Norm
+Multi-Head Attention
+Add & Norm
+Feed Forward
+Linear
+Softmax
+Output Probabilities
+$N \times$, $N \times$
+
+***
+
+**Description:**
+This diagram illustrates the Transformer model architecture, detailing its encoder-decoder structure. The technical content shows two main stacks: the input side and the output side (shifted right). Key objects include **Input Embedding**, **Positional Encoding**, and subsequent layers like **Multi-Head Attention**, **Feed Forward**, and **Add & Norm** residual connections. The process culminates in a final layer sequence of **Linear** transformation followed by **Softmax** to generate **Output Probabilities**. This chart visually maps the flow of data through these complex neural network components.

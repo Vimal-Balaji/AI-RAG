@@ -1,0 +1,7 @@
+**Extracted Text:**
+Figure 3. Structure of a LoRa frame. n ∈{1..4}. Preamble, Header (optional), Payload, Payload CRC (optional). $CR = 4/8$, $CR = 4/(4+n)$.
+
+***
+
+**Description:**
+This block diagram illustrates the technical structure of a LoRa frame. The frame is composed of four main objects: the mandatory **Preamble**, and three optional sections—the **Header**, the **Payload**, and the **Payload CRC**. The chart details the coding rates (CR) applied to these segments, which are critical technical parameters. Specifically, the diagram shows $CR = 4/8$ for the initial section and $CR = 4/(4+n)$ for the payload area, where $n \in \{1..4\}$.

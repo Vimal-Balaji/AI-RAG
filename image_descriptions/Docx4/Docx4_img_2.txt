@@ -1,0 +1,13 @@
+**Extracted Text:**
+"If a write by the application is large or straddles a chunk boundary, GFS client code breaks it down into multiple write operations. They all follow the control ﬂow described above but may be interleaved with and overwritten by concurrent operations from other clients. Therefore, the shared."
+
+***
+
+**Description of Image:**
+The provided image is blank; however, the extracted text describes a technical process related to data storage management within a distributed file system (GFS). The content details how GFS client code handles large write operations that cross chunk boundaries by breaking them into multiple smaller writes. It emphasizes that these operations are subject to concurrency issues, meaning they can be interleaved with and potentially overwritten by simultaneous operations from other clients.
+
+**Included Elements:**
+*   **Objects:** None (The text describes a system process).
+*   **Charts/Graphs/Tables:** None.
+*   **Axes labels/Graph trends:** Not applicable.
+*   **Technical content:** Yes. The text discusses GFS client code, write operations, chunk boundaries, and concurrent data access control flow.

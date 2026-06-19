@@ -1,0 +1,14 @@
+**Extracted Text:**
+
+CS7015 (Deep Learning) : Lecture 1 (Partial/Brief) History of Deep Learning
+Mitesh M. Khapra
+Department of Computer Science and Engineering, Indian Institute of Technology Madras
+NPTEL
+
+***
+
+**Image Description:**
+
+This image is the title slide for an academic lecture on **Technical Content**: "CS7015 (Deep Learning): Lecture 1 (Partial/Brief) History of Deep Learning." The presentation was given by Mitesh M. Khapra, affiliated with the Department of Computer Science and Engineering at IIT Madras.
+
+The slide is purely textual, containing no charts, graphs, axes labels, or tables. **Objects** include the speaker visible on the right side of the frame. Overall, it serves as an introductory academic presentation slide from NPTEL.

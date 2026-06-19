@@ -1,0 +1,12 @@
+**Extracted Text:**
+Figure 2: (left) Scaled Dot-Product Attention. (right) Multi-Head Attention consists of several attention layers running in parallel. Q, K, V, Scale, MatMul, SoftMax, Mask (opt.).
+
+***
+
+**Image Description:**
+
+This diagram illustrates the technical process of **Scaled Dot-Product Attention**, a core component of transformer models. The flow shows how input vectors (Query $Q$, Key $K$, and Value $V$) are processed through several mathematical steps. First, $Q$ and $K$ undergo scaling and matrix multiplication ($\text{MatMul}$). This result is then passed through the $\text{SoftMax}$ function and an optional masking step ($\text{Mask (opt.)}$). Finally, the output undergoes a second $\text{MatMul}$ operation to compute the attention weights. The overall structure represents the mathematical mechanism for calculating context-aware relationships between input data points.
+
+**Included Elements:**
+*   **Technical Content:** Scaled Dot-Product Attention, SoftMax, Matrix Multiplication ($\text{MatMul}$), Masking (optional).
+*   **Objects:** Flowchart diagram illustrating computational steps and vector inputs ($Q$, $K$, $V$).

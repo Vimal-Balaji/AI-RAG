@@ -1,0 +1,10 @@
+**Extracted Text:**
+From the visible labels on the electronic device:
+*   115V
+*   220-240V~ 50/60Hz
+*   DC 12V / 1A
+
+***
+
+**Image Description:**
+The image displays a compact, multi-port electronic device resting in front of its cardboard packaging. The unit is the primary object and features several connection ports and indicator lights. Technically, the device is designed for versatile power input, accepting both 115V and a range of 220-240V~ at 50/60Hz. It provides a stable DC output of 12V at 1A. No charts, graphs, axes labels, or tables are visible; the technical specifications are printed directly on the hardware itself.

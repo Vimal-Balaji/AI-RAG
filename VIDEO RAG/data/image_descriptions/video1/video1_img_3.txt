@@ -1,0 +1,15 @@
+**Extracted Text:**
+
+**Acknowledgements**
+
+*   Most of this material is based on the article “Deep Learning in Neural Networks: An Overview” by J. Schmidhuber [1]
+*   The errors, if any, are due to me and I apologize for them
+*   Feel free to contact me if you think certain portions need to be corrected (please provide appropriate references)
+
+*(Footer/Bottom Bar Text):* Mitesh M. Khapra | CS7015 (Deep Learning): Lecture 1
+
+***
+
+**Image Description:**
+
+This slide is an "Acknowledgements" page from a lecture presentation on Deep Learning. It contains no charts, graphs, tables, or axes labels. The primary technical content is the citation of the source material: “Deep Learning in Neural Networks: An Overview” by J. Schmidhuber. The text serves to acknowledge the source of the information and invites feedback regarding potential errors or necessary corrections from the audience.

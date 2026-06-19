@@ -1,0 +1,12 @@
+**Extracted Text:**
+LoRa gateway
+
+***
+
+**Image Description:**
+
+The image displays a physical hardware unit identified as an **LoRa gateway**. This device is housed in a rectangular enclosure and features two attached vertical antennas, indicating its function for long-range wireless communication.
+
+*   **Objects:** A main electronic enclosure/box structure and two external antennas.
+*   **Charts/Graphs/Tables/Axes Labels/Graph Trends:** None are present; the image is a photograph of hardware.
+*   **Technical Content:** The device serves as an LoRa gateway, utilizing the LoRa protocol for Internet of Things (IoT) connectivity over long distances. It is designed to transmit and receive data wirelessly.

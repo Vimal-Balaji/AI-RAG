@@ -1,0 +1,11 @@
+**Extracted Text:**
+Title: The Final Word
+Body Text: In 1950s electron microscopy finally confirmed the neuron doctrine by unambiguously demonstrating that nerve cells were individual cells interconnected through synapses (a network of many individual neurons).
+Timeline/Chart Data:
+*   1871-1873: Reticular theory
+*   1888-1891: Neuron Doctrine
+*   1906: Nobel Prize
+*   1950: Synapse
+
+**Description:**
+This slide, titled "The Final Word," describes how 1950s electron microscopy confirmed the neuron doctrine. The image features an object diagram illustrating two interconnected neurons via synapses. A timeline chart tracks this technical content, showing key historical milestones: Reticular theory (1871-1873), Neuron Doctrine (1888-1891), Nobel Prize (1906), and the confirmation of Synapse (1950). The text explains that nerve cells are individual units interconnected by synapses.

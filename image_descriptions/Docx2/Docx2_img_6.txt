@@ -1,0 +1,9 @@
+**Extracted Text:**
+Figure 2. Frequency variation over time of a sample signal emitted by a LoRa transmitter. Data taken from [21]. $f_c$ is the central frequency of the channel, and BW is the bandwidth. Preamble, Data, $f$, $t$, $f_c$, $BW$.
+
+***
+
+**Image Description:**
+This chart illustrates the **Frequency variation over time** ($f$ vs. $t$) of a sample signal from a LoRa transmitter. The graph features two main sections: "Preamble" and "Data." Key technical labels include $f_c$ (central frequency) and $BW$ (bandwidth).
+
+The signal exhibits periodic, sawtooth-like trends, demonstrating how the carrier frequency fluctuates around the central channel frequency ($f_c$) within the defined bandwidth. This visualization is crucial for understanding the spectral characteristics of LoRa communication signals.

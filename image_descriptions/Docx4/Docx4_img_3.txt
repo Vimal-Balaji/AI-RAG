@@ -1,0 +1,7 @@
+**Extracted Text:**
+Cluster A B Chunkservers 342 227 Available disk space 72 TB 180 TB Used disk space 55 TB 155 TB Number of Files 735 k 737 k Number of Dead ﬁles 22 k 232 k Number of Chunks 992 k 1550 k Metadata at chunkservers 13 GB 21 GB Metadata at master 48 MB 60 MB
+
+***
+
+**Description:**
+This data is presented in a **table** format, comparing various operational metrics between two clusters (Cluster A and Cluster B). The content is highly **technical**, detailing the performance of distributed storage systems. Key metrics include disk utilization (Available/Used space), chunk counts, file numbers, and metadata storage at both the chunkserver and master levels. The table allows for a direct comparison of resource allocation and capacity across the two clusters.

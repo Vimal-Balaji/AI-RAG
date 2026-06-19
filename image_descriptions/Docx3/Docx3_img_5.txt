@@ -1,0 +1,11 @@
+**Extracted Text:**
+Figure 7: Partitioning and placement of keys in the three strategies. A, B, and C depict the three unique nodes that form the preference list for the key k1 on the consistent hashing ring (N=3). The shaded area indicates the key range for which nodes A, B, and C form the preference list. Dark arrows indicate the token locations for various nodes.
+Strategy 1
+Strategy 2
+Strategy 3
+
+***
+
+**Image Description:**
+
+This figure presents three comparative diagrams (charts) illustrating the partitioning and placement of keys on a consistent hashing ring using three distinct strategies. The technical content focuses on how key $k_1$ is mapped to nodes A, B, and C ($N=3$). Objects include the circular hashing ring, representing token locations and node assignments. The graph trend demonstrates varying levels of key range coverage and efficiency across Strategy 1, Strategy 2, and Strategy 3. Specifically, the figure details how a preference list is formed for $k_1$ and shows which nodes are responsible for specific key ranges.

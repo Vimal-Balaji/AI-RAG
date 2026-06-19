@@ -1,0 +1,14 @@
+**Extracted Text:**
+
+From Description: "Figure 4: Average and 99.9 percentiles of latencies for read and write requests during our peak request season of December 2006. The intervals between consecutive ticks in the x-axis correspond to 12 hours. Latencies follow a diurnal pattern similar to the request rate and 99.9 percentile latencies are an order of magnitude higher than averages."
+
+From Image:
+*   **Y-Axis Label:** Client latencies in milliseconds ($\log$ scale)
+*   **X-Axis Label:** Timeline ((hourly plot of latencies during our peak season in Dec. 2006))
+*   **Legend/Data Series:** 99.9 Writes, 99.9 Reads, Avg. writes, Avg. Reads
+
+***
+
+**Image Description (Under 100 Words):**
+
+This line chart displays client latencies for read and write requests during the peak season of December 2006. The graph compares average and 99.9 percentile latencies over time. Key technical findings include a clear diurnal pattern in latency, mirroring the request rate. Notably, the 99.9 percentile latencies are consistently an order of magnitude higher than the averages across all operations. The axes label the Y-axis as "Client latencies in milliseconds ($\log$ scale)" and the X-axis as "Timeline."

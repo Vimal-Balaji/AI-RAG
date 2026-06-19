@@ -1,0 +1,10 @@
+**Extracted Text:**
+The authors can be reached at the following addresses: {sanjay,hgobioﬀ,shuntak}@google.com.
+
+***
+
+**Image Description:**
+Based on the provided text, there is no visual image or graphical content to describe. The extracted text serves as author attribution and contact information (metadata).
+
+*   **Objects/Charts/Tables/Axes labels/Graph trends:** None are present.
+*   **Technical Content:** The text provides professional contact details for the authors, listing their email addresses associated with Google. This content is purely textual and relates to academic or technical publication authorship.

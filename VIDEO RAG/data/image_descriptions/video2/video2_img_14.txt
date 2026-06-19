@@ -1,0 +1,9 @@
+**Extracted Text:**
+1. Efficiency in Half wave Rectifier
+2. PIV in Half wave Rectifier
+
+***
+
+**Image Description:**
+
+This image is a presentation slide focusing on electrical engineering concepts related to rectifiers. The primary technical content covers two key topics: **Efficiency in Half wave Rectifier** and **PIV (Peak Inverse Voltage) in Half wave Rectifier**. No charts, graphs, or tables are present; the information is presented using bullet points. An object—a speaker/presenter—is visible on the right side of the slide, suggesting that this content was delivered during a technical presentation or lecture.

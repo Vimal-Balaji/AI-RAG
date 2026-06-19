@@ -1,0 +1,10 @@
+**Extracted Text:**
+Figure 6. Map of LoRa ﬁeld test.
+(Locations/Labels): Isson-sur-Orge, Market Epinay sur Orge, Viry-Châtillon, La Grande.
+(Roads/Routes): A5, D177, D257, D256, D117, D445, E15, D77.
+(Streets/Areas): Rue des Rossays, Parc du Château, Av de Bretagne, Av de Provence, Av des Sablons, Société Générale, Av René Cassin, etc.
+
+***
+
+**Description:**
+This image is a technical map titled "Figure 6. Map of LoRa ﬁeld test," illustrating the geographical area for network testing. The map displays a detailed urban road network connecting various locations including Isson-sur-Orge and Viry-Châtillon. Key objects include major roads (A5, E15) and local streets (D77, D117). While there are no charts or graphs, the technical content is defined by the labeled infrastructure and specific geographical coordinates used for the LoRa field test deployment.

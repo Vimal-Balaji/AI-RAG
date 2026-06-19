@@ -1,0 +1,8 @@
+**Extracted Text:**
+2.3 Design Considerations
+Data replication algorithms used in commercial systems traditionally perform synchronous replica coordination in order to provide a strongly consistent data access interface. To achieve this level of consistency, these algorithms are forced to tradeoff the availability of the data under certain failure scenarios. For instance, rather than dealing with the uncertainty of the correctness of an answer, the data is made unavailable until it is absolutely certain that it is correct. From the very early replicated database works, it is well known that when dealing with the possibility of network failures, strong consistency and high data availability cannot be achieved simultaneously [2, 11]. As such, systems and applications need to be aware which properties can be achieved under which conditions.
+
+***
+
+**Image Description:**
+This flowchart illustrates a technical content flow for handling client requests in a distributed system architecture. The process begins with **Client Requests**, which are routed through various services (e.g., Page Rendering Components, Aggregator Services) via **Request Routing**. The data is ultimately sourced from multiple storage **Objects**: Dynamo instances, Amazon S3, and other datastores. No charts or graphs are present; the diagram maps a sequential service interaction model.

@@ -1,0 +1,8 @@
+The image describes a Halfwave Rectifier circuit converting AC signal to DC signal.
+
+**Objects:** The diagram includes an AC Mains source, Step Down Transformer, Diode, and Load Resistor ($R_L$).
+**Charts/Graphs:** A sinusoidal graph plots $V_{in} = V_m \sin(\omega t)$ against $\omega t$.
+**Technical Content:** Rectification converts AC to DC. The process relies on diode biasing: during the positive half-cycle, the diode is forward biased, allowing output ($V_o$) to follow input. Conversely, during the negative half-cycle, the diode is reverse biased, blocking current flow.
+**Axes Labels:** The graph uses $\omega t$ (time/angle) and Voltage (V).
+
+The trend shows that only the positive portion of the AC cycle passes through the load resistor.

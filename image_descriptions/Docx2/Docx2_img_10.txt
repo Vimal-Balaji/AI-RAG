@@ -1,0 +1,11 @@
+**Extracted Text:**
+Figure 5. Minimal observed RSSIs with different spreading factors.
+Spreading factor
+RSSI (dBm)
+Specified RSSI
+Observed RSSI
+
+***
+
+**Image Description:**
+This bar chart, titled "Spreading factor," compares the Specified and Observed Received Signal Strengths (RSSIs) in dBm across spreading factors 7 through 12. The technical content illustrates that the observed RSSI is consistently lower than the specified RSSI for all measured factors. A clear trend shows a significant drop in both values at Spreading Factors 10 and 11, with the lowest observed RSSI occurring at SF 12 (approximately -128 dBm). The chart effectively visualizes how spreading factor impacts signal strength performance.

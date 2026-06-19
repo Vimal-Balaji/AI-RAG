@@ -1,0 +1,9 @@
+**Extracted Text:**
+Halfwave Rectifier.
+AC Mains $\rightarrow$ Step Down Transformer $\rightarrow$ Diode $\rightarrow R_L$.
+Rectifier: It converts AC signal into DC Signal.
+During the Positive Half cycle, the Diode comes under forward bias, which results in the output same as the input.
+During the Negative Half cycle, the Diode comes under reverse bias, which results in zero output.
+
+**Image Description:**
+This diagram illustrates a **Halfwave Rectifier**, a circuit that converts AC to DC signals using an AC Mains source and a Step Down Transformer. The graph shows the sinusoidal input voltage ($V_{in}$) versus time ($\omega t$). The output voltage ($V_o$) demonstrates the rectification process: only the positive half-cycle passes through (forward bias), while the negative half-cycle is blocked, resulting in zero output. This technical content explains that during the negative cycle, the diode is under reverse bias.

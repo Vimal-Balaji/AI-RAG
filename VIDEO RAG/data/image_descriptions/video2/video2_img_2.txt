@@ -1,0 +1,11 @@
+**Extracted Text:**
+Halfwave Rectifier
+AC Mains, Step Down Transformer, Diode, $R_L$
+Rectifier: It converts AC signal into DC Signal.
+During the Positive Half cycle, the Diode comes under forward bias, which results in the output same as the input.
+In step down transformer, output voltag...
+
+**Image Description:**
+This diagram illustrates a **Halfwave Rectifier** circuit and its function. The circuit components include AC Mains, a Step Down Transformer, a Diode, and a load resistor ($R_L$). Technically, a rectifier converts an Alternating Current (AC) signal into a Direct Current (DC) signal.
+
+The accompanying chart shows the input voltage ($V_{in}$) as a sine wave over time ($\omega t$), and the output voltage ($V_o$). The graph trend demonstrates that during the positive half cycle, the diode is forward biased, allowing current flow, while the negative half cycle's voltage drops to zero. This process effectively blocks half of the input AC waveform.

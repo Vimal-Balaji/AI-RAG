@@ -1,0 +1,16 @@
+**Extracted Text:**
+Cluster A B
+Read rate (last minute) 583 MB/s 380 MB/s
+Read rate (last hour) 562 MB/s 384 MB/s
+Read rate (since restart) 589 MB/s 49 MB/s
+Write rate (last minute) 1 MB/s 101 MB/s
+Write rate (last hour) 2 MB/s 117 MB/s
+Write rate (since restart) 25 MB/s 13 MB/s
+Master ops (last minute) 325 Ops/s 533 Ops/s
+Master ops (last hour) 381 Ops/s 518 Ops/s
+Master ops (since restart) 202 Ops/s 347 Ops/s
+
+***
+
+**Description:**
+This is a technical data table comparing the performance metrics of two clusters, A and B. The axes labels track Read rate, Write rate, and Master operations (Ops/s) across three time periods: last minute, last hour, and since restart. Cluster A demonstrates consistently high read rates, particularly since restart (589 MB/s). In contrast, Cluster B shows significantly higher write rates and master operations in the short-term metrics (last minute/hour), indicating a much heavier write-intensive workload compared to Cluster A.

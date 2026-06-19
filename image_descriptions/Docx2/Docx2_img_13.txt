@@ -1,0 +1,12 @@
+**Extracted Text:**
+
+Figure 10. Link capacity usage and packet collision rate for a LoRaWAN network and compared to an ALOHA network. The load is as deﬁned in Section 5.2.
+(From Graph Axes/Legend): Capacity usage, Collision rate, Channel load, ALOHA capacity usage, LoRaWAN capacity usage, LoRaWAN collision rate.
+
+***
+
+**Image Description:**
+
+This line graph (Chart) compares the link performance of LoRaWAN and ALOHA networks. The X-axis represents "Channel load," while dual Y-axes track "Capacity usage" and "Collision rate." Three lines illustrate the metrics: ALOHA capacity usage, LoRaWAN capacity usage, and LoRaWAN collision rate.
+
+The graph shows that all three measured rates initially rise sharply with increasing channel load, peaking around 0.6 to 0.8, before declining. Technically, the LoRaWAN capacity usage consistently outperforms the ALOHA network across the tested loads.

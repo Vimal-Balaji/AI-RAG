@@ -1,0 +1,9 @@
+**Extracted Text:**
+Figure 2: (left) Scaled Dot-Product Attention. (right) Multi-Head Attention consists of several attention layers running in parallel. V, K, Q, h, Linear, Concat, Scaled Dot-Product Attention.
+
+***
+
+**Description:**
+This diagram illustrates the architecture of **Scaled Dot-Product Attention**, a core component of transformer models. The process begins with three input vectors (V, K, Q), which are first transformed by individual Linear layers. These outputs feed into the central "Scaled Dot-Product Attention" block. The resulting attention output is then passed through a Concatenation layer and a final Linear layer to produce the comprehensive output vector 'h'. This entire structure forms one head, with multiple such heads running in parallel to create **Multi-Head Attention**.
+
+*(Technical Content: Scaled Dot-Product Attention, Multi-Head Attention, Linear Transformations, Concatenation)*

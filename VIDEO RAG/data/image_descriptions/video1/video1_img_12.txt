@@ -1,0 +1,20 @@
+**Extracted Text:**
+Mahesh Kumar
+Web Studio Team
+Anitha
+Bharathi
+Catherine
+Clifford
+Deepthi
+Dhivya
+Divya
+
+***
+
+**Image Description:**
+The image is a commemorative slide or photo listing members of a technical group. The primary focus is on acknowledging the "Web Studio Team" and naming its members, including Anitha, Bharathi, Catherine, Clifford, Deepthi, Dhivya, and Divya, under the name Mahesh Kumar.
+
+*   **Objects:** Names (textual list) and a team designation ("Web Studio Team").
+*   **Charts/Graphs/Tables:** None are present.
+*   **Axes labels/Graph trends:** Not applicable.
+*   **Technical content:** The mention of "Web Studio Team" suggests the context is related to web development or technology projects.

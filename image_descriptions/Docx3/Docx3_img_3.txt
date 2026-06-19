@@ -1,0 +1,12 @@
+**Extracted Text:**
+99.9th percentile response times (msec)
+Timeline
+direct BDB writes
+buffered writes
+
+***
+
+**Image Description:**
+The image is a line chart tracking database performance over time. The **Y-axis** measures "99.9th percentile response times" in milliseconds (msec), and the **X-axis** represents the "Timeline."
+
+The graph compares two technical data series: `direct BDB writes` and `buffered writes`. Both lines show high variability, indicating fluctuating latency. The trend reveals that both write types experience sharp spikes, with `direct BDB writes` reaching significantly higher peak response times (up to 180 msec) compared to `buffered writes`. Overall, the performance metrics rise sharply from the start, fluctuate dramatically through the middle period, and then gradually decline toward the end of the timeline.

@@ -1,0 +1,11 @@
+**Extracted Text:**
+Rectifier: It converts AC signal into DC Signal. During the Positive Half cycle, the Diode comes under forward bias which results in the output same as the input. During positive half cycle, Diode comes in Forward bias. Parameters of Halfwave Rectifier.
+
+*(Diagram Labels/Equations):* AC Mains, Step Down Transformer, $V_{in}$, $R_L$, $V_o$.
+*(Graph Equations/Labels):* $V_{in} = V_m \sin(\omega t)$, $\pi$, $0$, $+V_m$, $-V_m$, $\omega t$.
+
+***
+
+**Image Description (Under 100 Words):**
+
+This technical diagram illustrates the principle of a halfwave rectifier, which converts AC to DC. The circuit includes an AC Mains source and a Step Down Transformer feeding through a diode to a load ($R_L$). A graph shows the input voltage ($V_{in} = V_m \sin(\omega t)$) over time ($\omega t$), with voltage axes ranging from $-V_m$ to $+V_m$. The key trend is that during the positive half cycle (0 to $\pi$), the diode enters **Forward bias**, allowing the output voltage ($V_o$) to follow the input's positive portion.

@@ -1,0 +1,7 @@
+The image is a presentation slide detailing the **Parameters of Halfwave Rectifier**.
+
+**Technical Content:** The primary focus is explaining the operational principles and calculating the Average DC Voltage/Current in a half-wave rectifier circuit. A key technical point highlighted is that during the Negative Half cycle, the Diode comes under reverse bias, resulting in zero output.
+
+**Objects:** The slide includes textual content (title, bullet points) and features a presenter visible on the right side.
+
+**Charts/Graphs/Tables/Axes labels/Graph trends:** None are present; the information is purely descriptive text.

@@ -1,0 +1,13 @@
+**Extracted Text:**
+Figure 11. Link capacity usage and packet collision rate for a LoRaWAN network when using conﬁrmed messages. The load is as deﬁned in Section 5.2.
+
+*   **Axes Labels:** Capacity usage, Collision rate, Channel load.
+*   **Legend/Lines:** Channel use, Confirmed messages channel use, Failure rate.
+
+***
+
+**Image Description (Short):**
+
+This line chart (Figure 11) illustrates the link capacity usage and packet collision rate for a LoRaWAN network using confirmed messages. The X-axis represents "Channel load," while dual Y-axes track "Capacity usage" and "Collision rate." Three lines are plotted: "Channel use," "Confirmed messages channel use," and "Failure rate."
+
+All metrics show an increasing trend with rising channel load. Specifically, the blue line ("Channel use") peaks around a 0.5–0.6 load, while the red line ("Failure rate") demonstrates a continuous, steady increase across the entire range, indicating performance degradation as network load increases.

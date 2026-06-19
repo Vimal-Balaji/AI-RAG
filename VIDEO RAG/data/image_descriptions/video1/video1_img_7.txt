@@ -1,0 +1,7 @@
+The slide describes the **Neuron Doctrine**, a key concept in neuroscience.
+
+**Technical Content:** The text explains that Santiago Ramón y Cajal used Golgi's technique to study the nervous system, proposing it consists of discrete individual cells forming a network, rather than a single continuous structure.
+
+**Objects/Charts:** A diagram illustrates interconnected neurons (objects), and a timeline chart tracks historical theories.
+
+**Axes Labels/Trends:** The timeline marks two periods: 1871-1873 for the **Reticular theory**, and 1888-1891 for the **Neuron Doctrine**. This visual trend highlights the shift in understanding of nervous system structure.

@@ -1,0 +1,17 @@
+**Extracted Text:**
+Figure 3: Version evolution of an object over time.
+D1 ([Sx, 1])
+write handled by Sx
+D2 ([Sx, 2])
+write handled by Sx
+D3 ([Sx, 2], [Sy, 1])
+write handled by Sy
+D4 ([Sx, 2], [Sz, 1])
+write handled by Sz
+reconciled and written by Sx
+D5 ([Sx, 3], [Sy, 1], [Sz, 1])
+
+***
+
+**Description:**
+This diagram illustrates the **technical content** of version evolution for an object over time. It is a flow diagram showing how data accumulates through multiple sources (Sx, Sy, Sz). The process starts with D1 and progresses sequentially to D5. Key steps involve writing versions handled by specific agents (e.g., `write handled by Sy`). The final step demonstrates **reconciliation** of all accumulated versions into the comprehensive object state, D5. There are no charts or axes labels; the diagram's trend shows the increasing complexity and completeness of the object structure over time.

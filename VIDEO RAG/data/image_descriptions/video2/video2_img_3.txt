@@ -1,0 +1,11 @@
+**Extracted Text:**
+Halfwave Rectifier
+AC Mains $\rightarrow$ Step Down Transformer $\rightarrow$ Diode $\rightarrow R_L$
+Rectifier: It converts AC signal into DC Signal.
+During the Positive Half cycle, the Diode comes under forward bias which results in the output same as the input.
+In step down transformer, output voltage is lower than input voltage.
+
+**Image Description:**
+This diagram illustrates a **Halfwave Rectifier** circuit setup using an AC Mains source, a Step Down Transformer, and a Diode connected to a load ($R_L$). The accompanying chart plots Voltage ($V_{in}$, $V_o$) against time ($\omega t$).
+
+The technical content explains that the rectifier converts AC signal into DC. During the positive half cycle, the diode is forward-biased, allowing current flow. The graph shows the input sine wave ($V_{in}$) and the resulting output voltage ($V_o$), which is a pulsed version of the input. A key principle noted is that the step-down transformer reduces the voltage: $V_{\text{output}} < V_{\text{input}}$.

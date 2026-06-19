@@ -1,0 +1,77 @@
+import cv2
+import sys
+import os
+import json
+import numpy as np
+from skimage.metrics import structural_similarity as ssim
+
+from utils.generateDescription import load_or_generate_description
+from utils.constants import FRAMES_PATH,VIDEO_PATH
+
+os.makedirs(FRAMES_PATH, exist_ok=True)
+
+def frame_similarity(frame1, frame2):
+    gray1 = cv2.cvtColor(frame1, cv2.COLOR_BGR2GRAY)
+    gray2 = cv2.cvtColor(frame2, cv2.COLOR_BGR2GRAY)
+    gray1 = cv2.resize(gray1, (256, 256))
+    gray2 = cv2.resize(gray2, (256, 256))
+    score, _ = ssim(gray1, gray2, full=True)
+    return score
+
+def extract_frames():
+    documents=[]
+    for file in os.listdir(VIDEO_PATH):
+
+        video_path = os.path.join(VIDEO_PATH, file)
+        video_name = os.path.splitext(file)[0]
+        cap = cv2.VideoCapture(video_path)
+        fps = cap.get(cv2.CAP_PROP_FPS)
+        frame_interval = int(fps*5)
+        frame_index = 0
+        saved_index = 0
+        prev_frame = None
+        while True:
+            ret, frame = cap.read()
+            if not ret:
+                break
+            if frame_index % frame_interval == 0:
+                timestamp = frame_index / fps
+                if prev_frame is None:
+                    img_name = f"{video_name}_img_{saved_index}.jpg"
+                    img_path = os.path.join(FRAMES_PATH, img_name)
+                    cv2.imwrite(img_path, frame)
+                    desc=load_or_generate_description(img_path,video_name)
+                    documents.append({
+                        "video_content":desc,
+                        "metadata":{
+                            "start": timestamp,
+                            "end": timestamp,
+                            "path": img_path
+                        }
+                    })
+                    prev_frame = frame
+                    saved_index += 1
+                else:
+                    similarity = frame_similarity(prev_frame, frame)
+                    if similarity > 0.85:
+                        documents[-1]["metadata"]["end"] = timestamp
+                    else:
+                        img_name = f"{video_name}_img_{saved_index}.jpg"
+                        img_path = os.path.join(FRAMES_PATH, img_name)
+                        cv2.imwrite(img_path, frame)
+                        desc=load_or_generate_description(img_path,video_name)
+                        documents.append({
+                            "video_content":desc,
+                            "metadata":{
+                                "start": timestamp,
+                                "end": timestamp,
+                                "path": img_path
+                            }
+                        })
+                        prev_frame = frame
+                        saved_index += 1
+
+            frame_index += 1
+
+        cap.release()
+    return documents

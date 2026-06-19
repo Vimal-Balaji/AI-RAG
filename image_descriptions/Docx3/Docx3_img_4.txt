@@ -1,0 +1,15 @@
+**Extracted Text:**
+Figure 6: Fraction of nodes that are out-of-balance (i.e., nodes whose request load is above a certain threshold from the average system load) and their corresponding request load. The interval between ticks in x-axis corresponds to a time period of 30 minutes.
+
+**Chart Legend/Labels:**
+*   Fraction of nodes out-of-balance (Dashed line)
+*   Request load (Solid line)
+*   X-Axis: Timeline
+*   Y1 Axis: Fraction of nodes out-of-balance (Scale 0 to 1.0)
+*   Y2 Axis: Request Load (scaled down by a constant)
+
+***
+
+**Image Description:**
+
+This is a dual-axis line chart tracking system load metrics over time. The X-axis represents the "Timeline," with intervals corresponding to 30 minutes. The graph plots two key technical variables: the "Fraction of nodes out-of-balance" and the overall "Request Load." Both lines show significant fluctuation, indicating periods where the proportion of overloaded nodes increases (reaching up to 0.8) alongside corresponding spikes in request load. This visualization monitors system stability by tracking deviations from average load thresholds.

@@ -1,0 +1,3 @@
+Based on the input provided, there is **no extracted text** to analyze. The prompt only contains placeholders (`""`) for the general description and does not include any readable data, charts, tables, or technical content.
+
+Therefore, I cannot describe the image or extract the requested details (objects, axes labels, graph trends, etc.). Please provide the actual text extraction from the PDF so I can complete the analysis.

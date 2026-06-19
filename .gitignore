@@ -1,6 +1,5 @@
 TEST
 venv
 .vscode
-temp.py
 files.txt
-image_descriptions
+__pycache__

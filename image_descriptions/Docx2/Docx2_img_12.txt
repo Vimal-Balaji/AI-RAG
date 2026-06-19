@@ -1,0 +1,17 @@
+**Extracted Text:**
+
+Figure 8. LoRaWAN frame format. The sizes of the ﬁelds are in bits.
+PHYPayload: MHDR : 8 MACPayload : FHDR : 56..176 FPort : 8 FRMPayload (encrypted) : MIC : 32
+MACPayload: FHDR : 56..176 FPort : 8 FRMPayload (encrypted)
+FHDR: DevAddr : 32 FCtrl : 8 FCnt : 16 FOpts : 0..120
+MHDR: MType : 3 RFU : 3 Major : 2
+FCtrl: Uplink: ADR : 1 ADRAckReq : 1 ACK : 1 FPending : 1 FOptsLen : 4
+(Downlink: ADR : 1 ADRAckReq : 1 ACK : 1 RFU : 1 FOptsLen : 4)
+FOpts: MACCommand_1 : 8..40 ... MACCommand_n : 8..40
+MACCommand: CID : 8 Args : 0..32
+
+***
+
+**Description:**
+
+This image is a technical diagram detailing the structure of the LoRaWAN frame format. It functions as a complex table, illustrating how various data fields are nested and sized in bits. The primary content is highly technical, breaking down components like PHYPayload, MACPayload, FHDR, MHDR, and FCtrl. These sections define specific parameters (e.g., DevAddr, FCnt) and their bit allocations for both uplink and downlink transmissions. No charts or graphs are present; the structure relies entirely on labeled fields and binary sizes to describe data encapsulation.
