@@ -27,6 +27,8 @@ def save_documents(documents, path=DOCUMENTS_PATH):
     os.makedirs(os.path.dirname(path), exist_ok=True)
     with open(path, "w", encoding="utf-8") as f:
         for document in documents:
+            if "path" in document.metadata:
+                document.metadata["path"] = document.metadata["path"].replace("\\", "/")
             item = {
                 "page_content": document.page_content,
                 "metadata": document.metadata,
@@ -41,9 +43,9 @@ def save_index(index, path=INDEX_PATH):
 def build_image_documents(pdf_path, output_dir=OUTPUT_DIR):
     context = image_extraction(pdf_path, output_dir)
     pdf_name = os.path.splitext(os.path.basename(pdf_path))[0]
-    image_dir = os.path.join(output_dir, pdf_name)
+    image_dir = f"{output_dir}/{pdf_name}"
     for image_file in os.listdir(image_dir):
-        full_path = os.path.join(image_dir, image_file)
+        full_path = f"{image_dir}/{image_file}"
         print("Processing:", full_path)
         context_text = context.get(full_path, ["", ""])[0]
         desc = load_or_generate_description(
@@ -54,7 +56,7 @@ def build_image_documents(pdf_path, output_dir=OUTPUT_DIR):
         document = Document(
             page_content=desc,
             metadata={
-                "path": full_path,
+                "path": full_path.replace("\\", "/"),
                 "page_num": context.get(full_path, ["", ""])[1],
                 "type": "image",
                 "source": os.path.basename(pdf_path),
@@ -76,7 +78,7 @@ def build_text_documents(pdf_path,chunk_size=500,chunk_overlap=100):
                 Document(
                     page_content=chunk,
                     metadata={
-                        "path": pdf_path,
+                        "path": pdf_path.replace("\\", "/"),
                         "page_num": page_number + 1,
                         "type": "text",
                         "source":os.path.basename(pdf_path),
@@ -100,7 +102,7 @@ if __name__ == "__main__":
     pdf_names=["Docx1.pdf","Docx2.pdf","Docx3.pdf","Docx4.pdf","Docx5.pdf"]
     documents = []
     for pdf_name in pdf_names:
-        pdf_path=os.path.join(PDF_PATH,pdf_name)
+        pdf_path = f"{PDF_PATH}/{pdf_name}"
         print(pdf_path)
         build_image_documents(pdf_path=pdf_path)
         build_text_documents(pdf_path=pdf_path,chunk_size=CHUNK_SIZE)

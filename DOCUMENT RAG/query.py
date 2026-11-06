@@ -22,13 +22,17 @@ bedrock = boto3.client(
 
 def load():
     with open(DOCUMENTS_PATH, "r", encoding="utf-8") as f:
-        docs = [
-            Document(
-                page_content=json.loads(line)["page_content"],
-                metadata=json.loads(line)["metadata"],
+        docs = []
+        for line in f:
+            data = json.loads(line)
+            if "metadata" in data and "path" in data["metadata"]:
+                data["metadata"]["path"] = data["metadata"]["path"].replace("\\", "/")
+            docs.append(
+                Document(
+                    page_content=data["page_content"],
+                    metadata=data["metadata"],
+                )
             )
-            for line in f
-        ]
     idx = faiss.read_index(INDEX_PATH)
     return docs, idx
 
@@ -81,6 +85,7 @@ def get_available_pages():
 # ── Image helpers ─────────────────────────────────────────────────────────────
 
 def _read_image_bytes(path: str) -> bytes:
+    path = path.replace("\\", "/")
     with open(path, "rb") as f:
         return f.read()
 
@@ -123,7 +128,7 @@ def generate_description(results, query_text: str = None, page_num: int = None) 
         if item.metadata["type"] != "image":
             content.append({"text": item.page_content})
         else:
-            image_path = item.metadata["path"]
+            image_path = item.metadata["path"].replace("\\", "/")
             print(f"Encoding image for Bedrock: {image_path}")
             content.append(
                 {

@@ -15,14 +15,15 @@ bedrock = boto3.client(
 # ── Helpers ───────────────────────────────────────────────────────────────────
 
 def get_description_path(pdf_name, image_name):
-    pdf_dir = os.path.join(DESCRIPTION_DIR, pdf_name)
+    pdf_dir = f"{DESCRIPTION_DIR}/{pdf_name}"
     os.makedirs(pdf_dir, exist_ok=True)
     txt_name = os.path.splitext(image_name)[0] + ".txt"
-    return os.path.join(pdf_dir, txt_name)
+    return f"{pdf_dir}/{txt_name}"
 
 
 def _read_image_bytes(path: str) -> bytes:
     """Return raw bytes for an image file."""
+    path = path.replace("\\", "/")
     with open(path, "rb") as f:
         return f.read()
 

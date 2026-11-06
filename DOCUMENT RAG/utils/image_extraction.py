@@ -6,7 +6,8 @@ def image_extraction(pdf_path,output_dir):
 
     context={}
     pdf_name = os.path.splitext(os.path.basename(pdf_path))[0]
-    os.makedirs(os.path.join(output_dir,pdf_name), exist_ok=True)
+    output_subdir = f"{output_dir}/{pdf_name}"
+    os.makedirs(output_subdir, exist_ok=True)
     doc = fitz.open(pdf_path)
     image_count = 0
 
@@ -24,7 +25,7 @@ def image_extraction(pdf_path,output_dir):
                 f"{pdf_name}_img_{image_count}.{image_ext}"
             )
 
-            image_path = os.path.join(output_dir,pdf_name,image_name)
+            image_path = f"{output_subdir}/{image_name}"
 
             with open(image_path, "wb") as f:
                 f.write(image_bytes)
