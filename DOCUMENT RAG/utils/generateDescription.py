@@ -1,7 +1,18 @@
-import requests
-from utils.constants import LM_STUDIO_URL,DESCRIPTION_DIR
-from utils.encodeBase64 import encode_image
+import boto3
 import os
+from utils.constants import DESCRIPTION_DIR
+from utils.encodeBase64 import encode_image
+
+# ── Bedrock client ────────────────────────────────────────────────────────────
+REGION   = os.getenv("AWS_DEFAULT_REGION", "ap-southeast-2")
+MODEL_ID = os.getenv("BEDROCK_MODEL_ID", "google.gemma-3-4b-it")
+
+bedrock = boto3.client(
+    service_name="bedrock-runtime",
+    region_name=REGION,
+)
+
+# ── Helpers ───────────────────────────────────────────────────────────────────
 
 def get_description_path(pdf_name, image_name):
     pdf_dir = os.path.join(DESCRIPTION_DIR, pdf_name)
@@ -9,48 +20,71 @@ def get_description_path(pdf_name, image_name):
     txt_name = os.path.splitext(image_name)[0] + ".txt"
     return os.path.join(pdf_dir, txt_name)
 
-def generate_description(path,text=""):
-    img_b64 = encode_image(path)
-    payload = {
-        "model": "google/gemma-4-4b",
-        "messages": [
+
+def _read_image_bytes(path: str) -> bytes:
+    """Return raw bytes for an image file."""
+    with open(path, "rb") as f:
+        return f.read()
+
+
+def _image_format(path: str) -> str:
+    """Infer Bedrock image format from file extension."""
+    ext = os.path.splitext(path)[-1].lower()
+    return {"jpg": "jpeg", ".jpg": "jpeg", ".jpeg": "jpeg",
+            ".png": "png", ".gif": "gif", ".webp": "webp"}.get(ext, "png")
+
+
+# ── Core generation ───────────────────────────────────────────────────────────
+
+def generate_description(path: str, text: str = "") -> str:
+    """
+    Call AWS Bedrock (Converse API) with an image and optional context text.
+    Returns a short description (≤ 100 words).
+    """
+    image_bytes  = _read_image_bytes(path)
+    image_format = _image_format(path)
+
+    prompt_text = (
+        f'This is the general description of the image extracted from the pdf. "{text}". '
+        "Extract all the text. From the text extracted describe this image in short. "
+        "Restrict the output with 100 words.\n"
+        "Include:\n"
+        "- Objects (if any)\n"
+        "- Charts (if any)\n"
+        "- Axes labels (if any)\n"
+        "- Graph trends (if any)\n"
+        "- Tables (if any)\n"
+        "- Technical content (if any)"
+    )
+
+    response = bedrock.converse(
+        modelId=MODEL_ID,
+        messages=[
             {
                 "role": "user",
                 "content": [
+                    {"text": prompt_text},
                     {
-                        "type": "text",
-                        "text":
-                        f"""
-                        This is the general description of the image extracted from the pdf.\"{text}\".
-                        Extract all the text.From the text extracted describe this image in short .Restrict the output with 100 words.
-                        Include:
-                        - Objects(if any)
-                        - Charts(if any)
-                        - Axes labels(if any)
-                        - Graph trends(if any)
-                        - Tables(if any)
-                        - Technical content(if any)
-                        """
-                    },
-                    {
-                        "type": "image_url",
-                        "image_url": {
-                            "url": f"data:image/png;base64,{img_b64}"
+                        "image": {
+                            "format": image_format,
+                            "source": {"bytes": image_bytes},
                         }
-                    }
-                ]
+                    },
+                ],
             }
         ],
-        "temperature": 0
-    }
+        inferenceConfig={"maxTokens": 512, "temperature": 0},
+    )
 
-    r = requests.post(LM_STUDIO_URL, json=payload)
-    return r.json()["choices"][0]["message"]["content"]
+    return response["output"]["message"]["content"][0]["text"]
 
 
-def load_or_generate_description(image_path, context_text, pdf_name):
+# ── Cache-aware entry point ───────────────────────────────────────────────────
+
+def load_or_generate_description(image_path: str, context_text: str, pdf_name: str) -> str:
     image_name = os.path.basename(image_path)
-    desc_path = get_description_path(pdf_name, image_name)
+    desc_path  = get_description_path(pdf_name, image_name)
+
     if os.path.exists(desc_path):
         print(f"Loading cached description: {desc_path}")
         with open(desc_path, "r", encoding="utf-8") as f:
@@ -58,6 +92,7 @@ def load_or_generate_description(image_path, context_text, pdf_name):
 
     print(f"Generating description for: {image_name}")
     description = generate_description(image_path, context_text)
+
     with open(desc_path, "w", encoding="utf-8") as f:
         f.write(description)
 

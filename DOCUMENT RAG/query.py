@@ -1,60 +1,65 @@
-from utils.embeddingClass import embeddings_model
-from utils.encodeBase64 import encode_image
-from utils.constants import DOCUMENTS_PATH, INDEX_PATH, LM_STUDIO_URL
-
-import re
-import requests
-import numpy as np
+import boto3
 import os
+import re
 import json
-from langchain_core.documents import Document
+import numpy as np
 import faiss
+
+from langchain_core.documents import Document
+from utils.embeddingClass import embeddings_model
+from utils.constants import DOCUMENTS_PATH, INDEX_PATH
+
+# ── Bedrock client ────────────────────────────────────────────────────────────
+REGION   = os.getenv("AWS_DEFAULT_REGION", "ap-southeast-2")
+MODEL_ID = os.getenv("BEDROCK_MODEL_ID", "google.gemma-3-4b-it")
+
+bedrock = boto3.client(
+    service_name="bedrock-runtime",
+    region_name=REGION,
+)
+
+# ── Document / index loading ──────────────────────────────────────────────────
 
 def load():
     with open(DOCUMENTS_PATH, "r", encoding="utf-8") as f:
-        documents = [
-            Document(page_content=json.loads(line)["page_content"],
-                     metadata=json.loads(line)["metadata"])
+        docs = [
+            Document(
+                page_content=json.loads(line)["page_content"],
+                metadata=json.loads(line)["metadata"],
+            )
             for line in f
         ]
+    idx = faiss.read_index(INDEX_PATH)
+    return docs, idx
 
-    index = faiss.read_index(INDEX_PATH)
-    return documents, index
 
-def retrieve(query, top_k=3):
-    q = embeddings_model.embed_query(query)
-    q = np.array([q]).astype("float32")
+# ── Retrieval ─────────────────────────────────────────────────────────────────
 
-    scores, idx = index.search(q, top_k)
+def retrieve(query: str, top_k: int = 3):
+    q = np.array([embeddings_model.embed_query(query)], dtype="float32")
+    scores, idx_arr = index.search(q, top_k)
 
     print("Scores:", scores)
-    print("Indices:", idx+1)
+    print("Indices:", idx_arr + 1)
 
-    retrieved_chunks = [documents[i] for i in idx[0]]
+    retrieved = [documents[i] for i in idx_arr[0]]
 
     with open("files.txt", "w", encoding="utf-8") as f:
-        for rank, chunk in enumerate(retrieved_chunks, start=1):
+        for rank, chunk in enumerate(retrieved, start=1):
             f.write(f"=== Chunk {rank} ===\n")
             f.write(chunk.page_content)
             f.write("\n\n")
 
-    return retrieved_chunks
+    return retrieved
 
-def detect_page_query(query):
-    """
-    Detect if the user is asking about a specific page number.
-    Returns the page number (int) if found, otherwise None.
 
-    Handles patterns like:
-      - "what is in page number 10"
-      - "show me page 3"
-      - "contents of page 5"
-      - "page no 7"
-      - "page #2"
-    """
+# ── Page-query helpers ────────────────────────────────────────────────────────
+
+def detect_page_query(query: str):
+    """Return the page number if the query targets a specific page, else None."""
     patterns = [
-        r'\bpage\s*(?:number|num|no\.?|#)?\s*(\d+)\b',
-        r'\bp(?:g|gs?)\.?\s*(\d+)\b',
+        r"\bpage\s*(?:number|num|no\.?|#)?\s*(\d+)\b",
+        r"\bp(?:g|gs?)\.?\s*(\d+)\b",
     ]
     for pattern in patterns:
         match = re.search(pattern, query, re.IGNORECASE)
@@ -62,34 +67,47 @@ def detect_page_query(query):
             return int(match.group(1))
     return None
 
-def get_documents_by_page(page_num):
-    """Return all documents whose metadata page_num matches the requested page."""
-    return [doc for doc in documents if doc.metadata.get("page_num") == page_num]
+
+def get_documents_by_page(page_num: int):
+    return [d for d in documents if d.metadata.get("page_num") == page_num]
+
 
 def get_available_pages():
-    """Return a sorted list of all page numbers present in the document store."""
-    return sorted(set(
-        doc.metadata["page_num"]
-        for doc in documents
-        if "page_num" in doc.metadata
-    ))
+    return sorted(
+        {d.metadata["page_num"] for d in documents if "page_num" in d.metadata}
+    )
 
 
+# ── Image helpers ─────────────────────────────────────────────────────────────
 
-def generate_description(results, query_text=None, page_num=None):
-    """Send retrieved images (base64 encoded) to Gemma and get a synthesized answer."""
-    content = []
+def _read_image_bytes(path: str) -> bytes:
+    with open(path, "rb") as f:
+        return f.read()
 
-    # Build a context-aware prompt depending on whether this is a page lookup or a semantic search
-    user_prompt = query_text if query_text else "Based on these images, provide a comprehensive answer."
+
+def _image_format(path: str) -> str:
+    ext = os.path.splitext(path)[-1].lower()
+    return {".jpg": "jpeg", ".jpeg": "jpeg",
+            ".png": "png", ".gif": "gif", ".webp": "webp"}.get(ext, "jpeg")
+
+
+# ── Bedrock generation ────────────────────────────────────────────────────────
+
+def generate_description(results, query_text: str = None, page_num: int = None) -> str:
+    """
+    Build a Bedrock Converse request from retrieved chunks (text + images)
+    and return the model's synthesised answer.
+    """
+    user_prompt = query_text or "Based on these images, provide a comprehensive answer."
 
     if page_num is not None:
         prompt_text = (
             f"The following content has been extracted directly from Page {page_num} of the document. "
-            f"The user asked: \"{user_prompt}\". "
+            f'The user asked: "{user_prompt}". '
             f"Answer strictly based on the content of Page {page_num} provided below. "
             f"Clearly state that your answer is based on Page {page_num}. "
-            f"For any images below, describe what they show and explain how they relate to Page {page_num}'s content."
+            "For any images below, describe what they show and explain how they relate "
+            f"to Page {page_num}'s content."
         )
     else:
         prompt_text = (
@@ -98,52 +116,48 @@ def generate_description(results, query_text=None, page_num=None):
             "the query ignore that image."
         )
 
-    content.append({"type": "text", "text": prompt_text})
+    # Build the content list for Bedrock Converse
+    content = [{"text": prompt_text}]
 
-    # Add each retrieved item as text or base64 image
     for item in results:
         if item.metadata["type"] != "image":
-            content.append({
-                "type": "text",
-                "text": item.page_content
-            })
+            content.append({"text": item.page_content})
         else:
             image_path = item.metadata["path"]
-            print(f"Encoding image for description: {image_path}")
-            img_b64 = encode_image(image_path)
-            content.append({
-                "type": "image_url",
-                "image_url": {
-                    "url": f"data:image/jpeg;base64,{img_b64}"
+            print(f"Encoding image for Bedrock: {image_path}")
+            content.append(
+                {
+                    "image": {
+                        "format": _image_format(image_path),
+                        "source": {"bytes": _read_image_bytes(image_path)},
+                    }
                 }
-            })
+            )
 
-    payload = {
-        "model": "google/gemma-4-4b",
-        "messages": [
-            {
-                "role": "user",
-                "content": content
-            }
-        ],
-        "temperature": 0.2,
-        "max_tokens": 3000
-    }
+    response = bedrock.converse(
+        modelId=MODEL_ID,
+        messages=[{"role": "user", "content": content}],
+        inferenceConfig={"maxTokens": 3000, "temperature": 0.2},
+    )
 
-    response = requests.post(LM_STUDIO_URL, json=payload)
-    return response.json()["choices"][0]["message"]["content"]
+    return response["output"]["message"]["content"][0]["text"]
+
+
+# ── Main REPL ─────────────────────────────────────────────────────────────────
 
 if __name__ == "__main__":
     documents, index = load()
+
+    print("AWS Bedrock RAG ready. Type 'exit' to quit.\n")
 
     while True:
         query = input("Query: ").strip()
         if not query:
             continue
-        if query.lower() in ["exit", "quit"]:
+        if query.lower() in ("exit", "quit"):
             break
 
-        # ── Page-number query branch ──────────────────────────────────────
+        # ── Page-number branch ────────────────────────────────────────────
         page_num = detect_page_query(query)
         if page_num is not None:
             page_docs = get_documents_by_page(page_num)
@@ -154,15 +168,15 @@ if __name__ == "__main__":
             else:
                 available = get_available_pages()
                 print(
-                    f"\n⚠️  Page {page_num} is not present in the document store.\n"
+                    f"\n⚠️  Page {page_num} is not in the document store.\n"
                     f"   Available pages: {available}\n"
                 )
             print("\n" + "=" * 60 + "\n")
             continue
 
-        # ── Regular RAG branch ────────────────────────────────────────────
+        # ── Semantic RAG branch ───────────────────────────────────────────
         results = retrieve(query, top_k=5)
-        answer = generate_description(results, query_text=query)
+        answer  = generate_description(results, query_text=query)
         print("\nAnswer:")
         print(answer)
         print("\n" + "=" * 60 + "\n")
