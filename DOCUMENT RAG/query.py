@@ -7,33 +7,105 @@ import faiss
 
 from langchain_core.documents import Document
 from utils.embeddingClass import embeddings_model
-from utils.constants import DOCUMENTS_PATH, INDEX_PATH
-
-# ── Bedrock client ────────────────────────────────────────────────────────────
-REGION   = os.getenv("AWS_DEFAULT_REGION", "ap-southeast-2")
-MODEL_ID = os.getenv("BEDROCK_MODEL_ID", "google.gemma-3-4b-it")
-
-bedrock = boto3.client(
-    service_name="bedrock-runtime",
-    region_name=REGION,
+from utils.constants import (
+    DOCUMENTS_PATH,
+    INDEX_PATH,
+    S3_BUCKET_NAME,
+    S3_DOCUMENTS_KEY,
+    S3_INDEX_KEY,
+    S3_FILES_TXT_KEY,
+    AWS_REGION,
+    BEDROCK_MODEL_ID,
+)
+from utils.s3_storage import (
+    read_image_bytes,
+    object_exists,
+    read_text,
+    download_file,
+    upload_text,
 )
 
-# ── Document / index loading ──────────────────────────────────────────────────
+# ── Bedrock client ────────────────────────────────────────────────────────────
+bedrock = boto3.client(
+    service_name="bedrock-runtime",
+    region_name=AWS_REGION,
+)
 
-def load():
-    with open(DOCUMENTS_PATH, "r", encoding="utf-8") as f:
-        docs = []
-        for line in f:
-            data = json.loads(line)
-            if "metadata" in data and "path" in data["metadata"]:
-                data["metadata"]["path"] = data["metadata"]["path"].replace("\\", "/")
-            docs.append(
-                Document(
-                    page_content=data["page_content"],
-                    metadata=data["metadata"],
+# ── Document / index loading (S3-first with local fallback) ────────────────────
+
+def load(
+    s3_docs_key: str = S3_DOCUMENTS_KEY,
+    s3_idx_key: str = S3_INDEX_KEY,
+    local_docs_path: str = DOCUMENTS_PATH,
+    local_index_path: str = INDEX_PATH,
+):
+    """
+    Load documents and FAISS index from S3 (with local fallback if offline).
+    """
+    docs = []
+
+    # 1. Load documents.jsonl
+    loaded_from_s3 = False
+    try:
+        if object_exists(s3_docs_key, bucket=S3_BUCKET_NAME):
+            print(f"Loading documents database from S3: s3://{S3_BUCKET_NAME}/{s3_docs_key}")
+            raw_text = read_text(s3_docs_key, bucket=S3_BUCKET_NAME)
+            for line in raw_text.strip().split("\n"):
+                if not line.strip():
+                    continue
+                data = json.loads(line)
+                if "metadata" in data and "path" in data["metadata"]:
+                    data["metadata"]["path"] = data["metadata"]["path"].replace("\\", "/")
+                docs.append(
+                    Document(
+                        page_content=data["page_content"],
+                        metadata=data["metadata"],
+                    )
                 )
+            loaded_from_s3 = True
+    except Exception as e:
+        print(f"Notice: S3 documents check encountered: {e}")
+
+    if not loaded_from_s3:
+        if os.path.exists(local_docs_path):
+            print(f"Loading documents database from local file: {local_docs_path}")
+            with open(local_docs_path, "r", encoding="utf-8") as f:
+                for line in f:
+                    if not line.strip():
+                        continue
+                    data = json.loads(line)
+                    if "metadata" in data and "path" in data["metadata"]:
+                        data["metadata"]["path"] = data["metadata"]["path"].replace("\\", "/")
+                    docs.append(
+                        Document(
+                            page_content=data["page_content"],
+                            metadata=data["metadata"],
+                        )
+                    )
+        else:
+            raise FileNotFoundError(
+                f"Documents not found in S3 (s3://{S3_BUCKET_NAME}/{s3_docs_key}) "
+                f"or locally ({local_docs_path}). Please run embedding.py first."
             )
-    idx = faiss.read_index(INDEX_PATH)
+
+    # 2. Load FAISS index
+    index_loaded_from_s3 = False
+    try:
+        if object_exists(s3_idx_key, bucket=S3_BUCKET_NAME):
+            print(f"Downloading FAISS index from S3: s3://{S3_BUCKET_NAME}/{s3_idx_key}")
+            download_file(s3_idx_key, local_index_path, bucket=S3_BUCKET_NAME)
+            index_loaded_from_s3 = True
+    except Exception as e:
+        print(f"Notice: S3 index download encountered: {e}")
+
+    if not index_loaded_from_s3 and not os.path.exists(local_index_path):
+        raise FileNotFoundError(
+            f"FAISS index not found in S3 (s3://{S3_BUCKET_NAME}/{s3_idx_key}) "
+            f"or locally ({local_index_path}). Please run embedding.py first."
+        )
+
+    print(f"Reading FAISS index from: {local_index_path}")
+    idx = faiss.read_index(local_index_path)
     return docs, idx
 
 
@@ -48,11 +120,22 @@ def retrieve(query: str, top_k: int = 3):
 
     retrieved = [documents[i] for i in idx_arr[0]]
 
+    # Format retrieval log
+    log_content = []
+    for rank, chunk in enumerate(retrieved, start=1):
+        log_content.append(f"=== Chunk {rank} ===\n{chunk.page_content}\n\n")
+    full_log = "".join(log_content)
+
+    # Write locally
     with open("files.txt", "w", encoding="utf-8") as f:
-        for rank, chunk in enumerate(retrieved, start=1):
-            f.write(f"=== Chunk {rank} ===\n")
-            f.write(chunk.page_content)
-            f.write("\n\n")
+        f.write(full_log)
+
+    # Store in S3 bucket
+    try:
+        upload_text(full_log, S3_FILES_TXT_KEY, bucket=S3_BUCKET_NAME)
+        print(f"Retrieval log uploaded to S3: s3://{S3_BUCKET_NAME}/{S3_FILES_TXT_KEY}")
+    except Exception as e:
+        print(f"Notice: Could not upload retrieval log to S3: {e}")
 
     return retrieved
 
@@ -84,16 +167,15 @@ def get_available_pages():
 
 # ── Image helpers ─────────────────────────────────────────────────────────────
 
-def _read_image_bytes(path: str) -> bytes:
-    path = path.replace("\\", "/")
-    with open(path, "rb") as f:
-        return f.read()
-
-
 def _image_format(path: str) -> str:
     ext = os.path.splitext(path)[-1].lower()
-    return {".jpg": "jpeg", ".jpeg": "jpeg",
-            ".png": "png", ".gif": "gif", ".webp": "webp"}.get(ext, "jpeg")
+    return {
+        ".jpg": "jpeg",
+        ".jpeg": "jpeg",
+        ".png": "png",
+        ".gif": "gif",
+        ".webp": "webp",
+    }.get(ext, "jpeg")
 
 
 # ── Bedrock generation ────────────────────────────────────────────────────────
@@ -102,6 +184,7 @@ def generate_description(results, query_text: str = None, page_num: int = None) 
     """
     Build a Bedrock Converse request from retrieved chunks (text + images)
     and return the model's synthesised answer.
+    Image bytes are loaded directly from S3 or local storage.
     """
     user_prompt = query_text or "Based on these images, provide a comprehensive answer."
 
@@ -125,22 +208,24 @@ def generate_description(results, query_text: str = None, page_num: int = None) 
     content = [{"text": prompt_text}]
 
     for item in results:
-        if item.metadata["type"] != "image":
+        if item.metadata.get("type") != "image":
             content.append({"text": item.page_content})
         else:
-            image_path = item.metadata["path"].replace("\\", "/")
-            print(f"Encoding image for Bedrock: {image_path}")
+            image_identifier = item.metadata.get("s3_key") or item.metadata.get("path")
+            print(f"Reading image for Bedrock from S3/local: {image_identifier}")
+            img_bytes = read_image_bytes(image_identifier, bucket=S3_BUCKET_NAME)
+
             content.append(
                 {
                     "image": {
-                        "format": _image_format(image_path),
-                        "source": {"bytes": _read_image_bytes(image_path)},
+                        "format": _image_format(image_identifier),
+                        "source": {"bytes": img_bytes},
                     }
                 }
             )
 
     response = bedrock.converse(
-        modelId=MODEL_ID,
+        modelId=BEDROCK_MODEL_ID,
         messages=[{"role": "user", "content": content}],
         inferenceConfig={"maxTokens": 3000, "temperature": 0.2},
     )
@@ -153,7 +238,7 @@ def generate_description(results, query_text: str = None, page_num: int = None) 
 if __name__ == "__main__":
     documents, index = load()
 
-    print("AWS Bedrock RAG ready. Type 'exit' to quit.\n")
+    print(f"AWS Bedrock RAG ready (S3 Bucket: {S3_BUCKET_NAME}). Type 'exit' to quit.\n")
 
     while True:
         query = input("Query: ").strip()
@@ -181,7 +266,7 @@ if __name__ == "__main__":
 
         # ── Semantic RAG branch ───────────────────────────────────────────
         results = retrieve(query, top_k=5)
-        answer  = generate_description(results, query_text=query)
+        answer = generate_description(results, query_text=query)
         print("\nAnswer:")
         print(answer)
         print("\n" + "=" * 60 + "\n")
